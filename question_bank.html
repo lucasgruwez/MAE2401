@@ -1,0 +1,117 @@
+<html>
+
+<head>
+	<title>Question Bank</title>
+	<style>
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			overflow-y: scroll;
+		}
+		main {
+			width: 960px;
+			max-width: 80%;
+			margin: 0 auto;
+		}
+		img {
+			width: 100%;
+			height: auto;
+		}
+		.question, .answer {
+			text-align: center;
+			border: 2px solid black;
+		}
+		button {
+			display: block;
+			margin: 32px auto;
+		}
+	</style>
+</head>
+
+<body>
+
+	<main>
+		<h1>MAE2401 Questions</h1>
+
+		<div class="question"></div>
+
+		<!-- Answer button -->
+		<button onclick="show()" class="show">Show Answer</button>
+		<button onclick="hide()" class="hide">Hide Answer</button>
+		<button onclick="next()">Next Question</button>
+
+		<div class="answer" style="display: none;"></div>
+
+	</main>
+
+	<script>
+		prev_questions = [];
+		next_questions = [];
+		n_questions = 987;
+
+		// Create image element
+		q_img_element = document.createElement("img");
+		a_img_element = document.createElement("img");
+		// Add image to document
+		document.querySelector(".question").appendChild(q_img_element);
+		document.querySelector(".answer").appendChild(a_img_element);
+
+		function show() {
+			document.querySelector(".answer").style.display = "block";
+			document.querySelector(".show").style.display = "none";
+			document.querySelector(".hide").style.display = "block";
+		}
+
+		function hide() {
+			document.querySelector(".answer").style.display = "none";
+			document.querySelector(".show").style.display = "block";
+			document.querySelector(".hide").style.display = "none";
+		}
+
+		hide();
+
+		function next() {
+			// Change question
+			if (next_questions.length == 0) {
+				q_idx = Math.floor(Math.random() * n_questions) + 1;
+			} else {
+				q_idx = next_questions.pop();
+			}
+
+			// Save question index
+			prev_questions.push(q_idx);
+
+			q_img = "questions/question_" + q_idx.toString().padStart(3, '0') + ".png";
+			a_img = "questions/answers_" + q_idx.toString().padStart(3, '0') + ".png";
+			q_img_element.src = q_img;
+			a_img_element.src = a_img;
+		}
+
+		function prev() {
+			if (prev_questions.length == 0) {return;}
+			if (next_questions.length == 0) {prev_questions.pop();}
+			// Save next question index
+			next_questions.push(q_idx);
+			q_idx = prev_questions.pop();
+
+			q_img = "questions/question_" + q_idx.toString().padStart(3, '0') + ".png";
+			a_img = "questions/answers_" + q_idx.toString().padStart(3, '0') + ".png";
+			q_img_element.src = q_img;
+			a_img_element.src = a_img;
+		}
+
+		next()
+
+		// Map arrows to next and previous
+		document.body.onkeyup = function(e) {
+			if (e.keyCode == 39) {
+				next();
+			}
+			if (e.keyCode == 37) {
+				prev();
+			}
+		}
+	</script>
+
+</body>
+
+</html>
