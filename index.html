@@ -22,7 +22,15 @@
 		}
 		button {
 			display: block;
-			margin: 32px auto;
+			margin: 16px auto;
+		}
+		/* Goto question styling */
+		.goto {
+			text-align: center;
+		}
+		.goto * {
+			display: inline-block;
+			vertical-align: middle;
 		}
 	</style>
 </head>
@@ -32,12 +40,21 @@
 	<main>
 		<h1>MAE2401 Questions</h1>
 
+		<h2 class="question_number"></h2>
+
 		<div class="question"></div>
 
 		<!-- Answer button -->
 		<button onclick="show()" class="show">Show Answer</button>
 		<button onclick="hide()" class="hide">Hide Answer</button>
 		<button onclick="next()">Next Question</button>
+
+		<!-- Goto question -->
+		<div class="goto">
+			<label for="question_number">Go to question:</label>
+			<input type="number" id="question_number" name="question_number" min="1" max="987" value="">
+			<button onclick="goto()">Go</button>
+		</div>
 
 		<div class="answer" style="display: none;"></div>
 
@@ -69,6 +86,31 @@
 
 		hide();
 
+		function goto() {
+			// Clear next and previous questions
+			next_questions = [];
+			prev_questions = [];
+
+			// Get question number
+			q_idx = document.getElementById("question_number").value;
+
+			// Change question
+			q_img = "questions/question_" + q_idx.toString().padStart(3, '0') + ".png";
+			a_img = "questions/answers_" + q_idx.toString().padStart(3, '0') + ".png";
+			q_img_element.src = q_img;
+			a_img_element.src = a_img;
+			
+			document.getElementsByClassName("question_number")[0].innerHTML = "Question " + q_idx.toString();
+		}
+
+		// Also run goto when enter is pressed
+		document.getElementById("question_number").addEventListener("keyup", function(event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				goto();
+			}
+		});
+
 		function next() {
 			// Change question
 			if (next_questions.length == 0) {
@@ -83,10 +125,14 @@
 			// Save question index
 			prev_questions.push(q_idx);
 
+			// Change question
 			q_img = "questions/question_" + q_idx.toString().padStart(3, '0') + ".png";
 			a_img = "questions/answers_" + q_idx.toString().padStart(3, '0') + ".png";
 			q_img_element.src = q_img;
 			a_img_element.src = a_img;
+			
+			document.getElementsByClassName("question_number")[0].innerHTML = "Question " + q_idx.toString();
+			document.getElementById("question_number").value = q_idx;
 		}
 
 		function prev() {
@@ -99,10 +145,14 @@
 			// Hide answers
 			hide()
 
+			// Change question
 			q_img = "questions/question_" + q_idx.toString().padStart(3, '0') + ".png";
 			a_img = "questions/answers_" + q_idx.toString().padStart(3, '0') + ".png";
 			q_img_element.src = q_img;
 			a_img_element.src = a_img;
+
+			document.getElementsByClassName("question_number")[0].innerHTML = "Question " + q_idx.toString();
+			document.getElementById("question_number").value = q_idx;
 		}
 
 		next()
