@@ -76,6 +76,9 @@
 			} else {
 				q_idx = next_questions.pop();
 			}
+			
+			// Hide answers
+			hide()
 
 			// Save question index
 			prev_questions.push(q_idx);
@@ -92,6 +95,9 @@
 			// Save next question index
 			next_questions.push(q_idx);
 			q_idx = prev_questions.pop();
+			
+			// Hide answers
+			hide()
 
 			q_img = "questions/question_" + q_idx.toString().padStart(3, '0') + ".png";
 			a_img = "questions/answers_" + q_idx.toString().padStart(3, '0') + ".png";
